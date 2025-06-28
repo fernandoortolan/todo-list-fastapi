@@ -2,7 +2,13 @@ from http import HTTPStatus
 
 from fastapi import FastAPI  # Importa da biblioteca fastapi o objeto FastAPI
 
-from todo_list_fastapi.schemas import Message, UserDB, UserPublic, UserSchema
+from todo_list_fastapi.schemas import (
+    Message,
+    UserDB,
+    UserList,
+    UserPublic,
+    UserSchema,
+)
 
 app = FastAPI()  # Inicia uma aplicação FastAPI
 
@@ -19,3 +25,8 @@ def create_user(user: UserSchema):
     user_with_id = UserDB(**user.model_dump(), id=len(database) + 1)
     database.append(user_with_id)
     return user_with_id
+
+
+@app.get('/users/', response_model=UserList)
+def read_users():
+    return {'users': database}
